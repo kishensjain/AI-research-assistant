@@ -1,7 +1,8 @@
 import gradio as gr
 import os
-from openai import OpenAI
+from openai import OpenAI, APIConnectionError
 from dotenv import load_dotenv
+from src.chunker import get_relevant_chunks
 
 load_dotenv()
 
@@ -18,7 +19,43 @@ def load_sources(sources_text: str, files):
 
 
 def respond(user_message: str, history: list, chunks: list):
-    pass
+    if not chunks:
+        history.append({"role": "user", "content": user_message})
+        history.append(
+            {"role": "assistant", "content": "⚠️ Please load some sources first."})
+        yield history
+        return
+
+    relevant_content = get_relevant_chunks(user_message, chunks)
+
+    messages = [
+        {"role": "system", "content": build_system_prompt(relevant_content)},
+        *history,
+        {"role": "user", "content": user_message}
+    ]
+
+    history.append({"role": "user", "content": user_message})
+    history.append({"role": "assistant", "content": ""})
+
+    try:
+        stream = client.chat.completions.create(
+            model=MODEL,
+            messages=messages,
+            stream=True
+        )
+        
+        for chunk in stream:
+            delta = chunk.choices[0].delta.content or ""
+            history[-1]["content"] += delta
+            yield history
+    
+    except APIConnectionError:
+        history[-1]["content"] = "❌ Could not connect to Ollama. Run: ollama serve"
+        yield history
+    except Exception as e:
+        history[-1]["content"] = f"❌ Unexpected error: {e}"
+        yield history
+
 
 
 def build_ui() -> gr.Blocks:
