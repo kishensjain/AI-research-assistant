@@ -36,8 +36,8 @@ Distill is an AI-powered research assistant that lets you load multiple sources 
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/distill.git
-cd distill
+git clone https://github.com/yourusername/distill-AI-research-assistant.git
+cd distill-AI-research-assistant
 ```
 
 ### 2. Install dependencies
