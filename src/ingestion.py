@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from pypdf import PdfReader
 from docx import Document
-
+from youtube_transcript_api import YouTubeTranscriptApi
+import re
 
 def fetch_url(url: str) -> str:
     """Fetch a URL and return clean text content."""
@@ -48,7 +49,10 @@ def extract_docx(file_path: str) -> str:
 
 def load_text(source: str) -> str:
     """Accept either a URL or raw pasted text."""
-    if source.startswith("http://") or source.startswith("https://"):
+    if "youtube.com/watch" in source or "youtu.be/" in source:
+        print("Fetching YouTube transcript...")
+        return extract_youtube(source)
+    elif source.startswith("http://") or source.startswith("https://"):
         print("Fetching URL...")
         return fetch_url(source)
     else:
@@ -57,8 +61,21 @@ def load_text(source: str) -> str:
 
 def load_file(file_path: str) -> str:
     if file_path.endswith(".pdf"):
-        return extract_pdf(file_path)  # function to be defined soon
+        return extract_pdf(file_path) 
     elif file_path.endswith(".docx"):
-        return extract_docx(file_path)  # function to be defined soon
+        return extract_docx(file_path)
     else:
         return open(file_path, "r").read()
+
+def extract_youtube(url: str) -> str:
+    
+    match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11})", url)
+    if not match:
+        raise ValueError("Could not extract video ID from URL")
+    
+    video_id = match.group(1)
+    
+    ytt = YouTubeTranscriptApi()
+    transcript = ytt.fetch(video_id)
+    text = " ".join([entry.text for entry in transcript])
+    return text

@@ -52,7 +52,7 @@ def load_sources(sources_text: str, files):
                 log.append(f"❌ Failed to load file: {e}")
 
     if not all_content:
-        return "No sources provided.", []
+        return "No sources provided.", [], "No sources loaded."
 
     combined = "\n\n---\n\n".join(all_content)
     chunks = chunk_text(combined)
@@ -151,7 +151,7 @@ def build_ui() -> gr.Blocks:
             load_btn.click(
                 fn=load_sources,
                 inputs=[sources_input, file_input],
-                outputs=[load_output, chunks_state,summary_output]
+                outputs=[load_output, chunks_state, summary_output]
             )
 
             send_btn.click(
