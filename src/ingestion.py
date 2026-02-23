@@ -32,6 +32,19 @@ def fetch_url(url: str) -> str:
 
     return clean_text
 
+def extract_pdf(file_path: str) -> str:
+    reader = PdfReader(file_path)
+    text = ""
+
+    # reader.pages becomes a list of all pages in the PDF.
+    for page in reader.pages:
+        text += page.extract_text()
+    return text.strip()
+
+def extract_docx(file_path: str) -> str:
+    doc = Document(file_path)
+    text = "\n".join([para.text for para in doc.paragraphs if para.text.strip()])
+    return text.strip()
 
 def load_text(source: str) -> str:
     """Accept either a URL or raw pasted text."""
