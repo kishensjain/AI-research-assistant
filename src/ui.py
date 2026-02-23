@@ -113,9 +113,9 @@ def respond(user_message: str, history: list, chunks: list):
 
 
 def build_ui() -> gr.Blocks:
-    with gr.Blocks(title="AI research assistant") as demo:
+    with gr.Blocks(title="Distill - AI Research Assistant") as demo:
         gr.Markdown(
-            "# 🔍 AI Research Assistant by Kishen\nLoad URLs or paste text, then ask questions about it.")
+            "# 🔍 Distill - AI Research Assistant by Kishen\nLoad URLs, PDFs, Word docs, or YouTube videos — then ask questions about them.")
 
         chunks_state = gr.State([])
 
