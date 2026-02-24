@@ -34,7 +34,7 @@ def extract_youtube(url: str) -> str:
 
     response = requests.get(
         "https://api.supadata.ai/v1/youtube/transcript",
-        params={"videoId": video_id, "text": True},
+        params={"videoId": video_id, "text": True}, # Meaning:Fetch transcript, return as text
         headers={"x-api-key": os.getenv("SUPADATA_API_KEY")}
     )
 
@@ -43,7 +43,7 @@ def extract_youtube(url: str) -> str:
 
     data = response.json()
     content = data.get("content", "")
-    if isinstance(content, list):
+    if isinstance(content, list): # this checks if content is a list
         return " ".join([item.get("text", "") for item in content])
     return content
 
