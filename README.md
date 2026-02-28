@@ -107,7 +107,7 @@ uv run main.py
 distill/
 ├── main.py          # Entry point
 ├── src/
-    |── cosine_similarity.py # Cosine similarity
+    ├── cosine_similarity.py # Cosine similarity with explaination of the topic
 │   ├── ingestion.py # URL, file, and YouTube loading
 │   ├── chunker.py   # Text splitting and relevance scoring
 │   └── ui.py        # Gradio interface and LLM chat logic
