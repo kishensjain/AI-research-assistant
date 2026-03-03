@@ -44,17 +44,28 @@ Distill implements semantic RAG from scratch — without any external RAG framew
 
 1. **Ingest** — Fetch and clean content from URLs, PDFs, Word docs, or YouTube transcripts  
 2. **Chunk** — Split content into overlapping text chunks  
-3. **Embed** — Convert chunks into vector embeddings using `gemini-embedding-001`  
+3. **Embed** — Convert chunks into vector embeddings using `BAAI/bge-base-en-v1.5`  
 4. **Retrieve** — Compute cosine similarity between query and stored embeddings  
 5. **Generate** — Send top-K relevant chunks + conversation history to the LLM  
 6. **Stream** — Return the response in real time  
 
 ---
 
+## 🧠 Embedding Model
+
+Embeddings are generated using:
+
+`BAAI/bge-base-en-v1.5` (open-source, via SentenceTransformers)
+
+The model is downloaded once and cached.  
+No Hugging Face Inference API is used.
+
+---
+
 ## Tech Stack
 
 - **Gradio** — Web UI  
-- **Gemini API** — Embeddings (`gemini-embedding-001`)  
+- **SentenceTransformers** — Semantic embeddings   
 - **Ollama Cloud** — LLM generation (OpenAI-compatible client)  
 - **NumPy** — Cosine similarity computation  
 - **BeautifulSoup4** — Web scraping  
